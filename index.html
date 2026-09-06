@@ -769,7 +769,17 @@ function boot() {
   const [s, b] = fromHash(); go(s, b, 1);
   document.body.classList.remove('explore');
 }
-document.addEventListener('DOMContentLoaded', boot);
+/* ---------- portal hand-off: ?hub=1 shows a small Portal button (never on the plain URL) ---------- */
+const DECK_KEY = 'maruah'; const PORTAL_HUB = '../nictsed-portal-v2/';
+function hubInit() {
+  if (!/[?&]hub=1/.test(location.search)) return;
+  const a = document.createElement('a'); a.id = 'hubbtn'; a.textContent = 'PORTAL'; a.title = 'Back to the NICTSeD portal';
+  a.style.cssText = 'position:fixed;left:14px;top:14px;z-index:9999;font:800 12px/1 Archivo,system-ui,sans-serif;letter-spacing:.18em;padding:9px 14px;border-radius:999px;background:rgba(16,20,24,.85);color:#F2B233;border:2px solid #F2B233;text-decoration:none;opacity:.85';
+  a.href = PORTAL_HUB + '?deck=' + DECK_KEY; a.addEventListener('click', e => { a.href = PORTAL_HUB + '?deck=' + DECK_KEY + '#s' + (D.s + 1) + (D.b ? '.' + D.b : ''); });
+  document.body.appendChild(a);
+}
+window.D = D; window.go = go; window.next = next; window.prev = prev;
+document.addEventListener('DOMContentLoaded', () => { boot(); hubInit(); });
 </script>
 <script>/* ===================== MARUAH v2 · 30 slides rendered from the v1 content model ===================== */
 /* SLIDEDATA is the exact text of v1 (kicker, h1, body, cards, tables...). Nothing here changes a word; only the look and the motion. */
