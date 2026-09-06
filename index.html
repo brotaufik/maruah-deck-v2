@@ -550,7 +550,8 @@ function mount(i, b, { dir = 1, first = false } = {}) {
   root.querySelectorAll('[data-b],[data-eq],.stag').forEach(el => { el.style.transition = ''; });
   D.s = i; D.b = b; D.root = root;
   if (sl.onEnter) sl.onEnter(root, { reduce: D.reduce });
-  requestAnimationFrame(() => applyBuild(root, b, -1));
+  /* setTimeout rather than requestAnimationFrame: rAF is paused in a background tab, which left the first slide blank until the window got focus. */
+  setTimeout(() => { if (D.root === root) applyBuild(root, b, -1); }, 30);
   if (old) { old.classList.add('exit'); if (dir < 0) old.classList.add('back'); setTimeout(() => old.remove(), 500); }
   if (!first && sl.act !== prevAct && dir > 0 && b === 0) sweep(a);
   chrome();
